@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-color="cyan">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jubayer Uddin Alvi | Data Scientist</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-logo">JA<span class="accent">.</span></a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <!-- Theme & Color Controls (6 Eye-Catching Themes) -->
+        <div class="theme-controls">
+          <!-- Color Switcher -->
+          <div class="color-switcher" id="color-switcher">
+            <button class="color-btn active" data-color="cyan" title="Cyan" style="background:#00d4ff"></button>
+            <button class="color-btn" data-color="green" title="Green" style="background:#00e676"></button>
+            <button class="color-btn" data-color="amber" title="Amber" style="background:#f59e0b"></button>
+            <button class="color-btn" data-color="purple" title="Purple" style="background:#a855f7"></button>
+            <button class="color-btn" data-color="rose" title="Electric Rose" style="background:#ff2a70"></button>
+            <button class="color-btn" data-color="blue" title="Electric Blue" style="background:#2563eb"></button>
+          </div>
+          <!-- Dark/Light Toggle -->
+          <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode" aria-label="Toggle theme">
+            <i class="fas fa-moon" id="theme-icon"></i>
+          </button>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="grid-overlay"></div>
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Available for opportunities
+      </div>
+      <h1 class="hero-name">Jubayer Uddin<br /><span class="gradient-text">Alvi</span></h1>
+      <p class="hero-title">
+        <span class="typed-wrapper">
+          <span class="typed" id="typed"></span><span class="cursor">|</span>
+        </span>
+      </p>
+      <p class="hero-desc">
+        Turning raw data into <strong>actionable insights</strong> through advanced ML, statistical analysis, and compelling data storytelling.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">
+          <i class="fas fa-folder-open"></i> View Projects
+        </a>
+        <a href="#contact" class="btn btn-secondary">
+          <i class="fas fa-paper-plane"></i> Get In Touch
+        </a>
+        <!-- CV Download Button — add cv.pdf to this folder when ready -->
+        <a href="cv.pdf" download="Jubayer_Uddin_Alvi_CV.pdf" class="btn btn-cv cv-download-btn" title="CV will be available soon">
+          <i class="fas fa-file-arrow-down"></i> Download CV
+          <span class="cv-badge">Soon</span>
+        </a>
+      </div>
+      <div class="hero-socials">
+        <a href="mailto:jubayeralvi309@gmail.com" aria-label="Email" title="Email">
+          <i class="fas fa-envelope"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/jubayer-uddin-alvi-aaa0ba270/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="https://github.com/Mj-Alvi" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="data-card">
+        <div class="data-card-header">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="filename">model_training.py</span>
+        </div>
+        <pre class="code-block"><code><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestClassifier
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> accuracy_score
+
+<span class="fn">model</span> = RandomForestClassifier(
+    n_estimators=<span class="num">200</span>,
+    max_depth=<span class="num">8</span>,
+    random_state=<span class="num">42</span>
+)
+
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+<span class="cm"># Accuracy: 97.4%</span>
+acc = accuracy_score(y_test, y_pred)
+<span class="fn">print</span>(<span class="str">f"Accuracy: {acc:.2%}"</span>)</code></pre>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-icon"><i class="fas fa-brain"></i></span>
+          <span class="stat-num">ML</span>
+          <span class="stat-label">Algorithms</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon"><i class="fas fa-chart-line"></i></span>
+          <span class="stat-num">EDA</span>
+          <span class="stat-label">Analysis</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon"><i class="fas fa-database"></i></span>
+          <span class="stat-num">SQL</span>
+          <span class="stat-label">Engineering</span>
+        </div>
+      </div>
+    </div>
+    <a href="#about" class="scroll-down">
+      <i class="fas fa-chevron-down"></i>
+    </a>
+  </section>
+
+  <!-- ═══════════════ ABOUT ═══════════════ -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">About Me</span>
+        <h2 class="section-title">Who I Am</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-avatar-wrap reveal-left">
+          <img src="photo.jpg" alt="Jubayer Uddin Alvi" class="avatar-img" />
+          <div class="avatar-ring"></div>
+          <div class="avatar-badge">
+            <i class="fas fa-chart-pie"></i>
+            Data Scientist
+          </div>
+        </div>
+        <div class="about-text reveal-right">
+          <p>
+            As a data scientist, I am an analytical problem solver driven by a passion for uncovering hidden patterns within complex datasets and turning raw numbers into actionable strategic insights.
+          </p>
+          <p>
+            Leveraging a toolkit of advanced statistics, machine learning algorithms, and data visualization techniques, I build predictive models that solve real-world problems and guide data-driven decision-making.
+          </p>
+          <p>
+            My work bridges technical rigor and practical application — translating complex algorithmic findings into clear, impactful stories that optimize processes, forecast trends, and unlock measurable value.
+          </p>
+          <div class="about-highlights">
+            <div class="highlight-item"><i class="fas fa-check-circle"></i><span>Predictive Modelling</span></div>
+            <div class="highlight-item"><i class="fas fa-check-circle"></i><span>Machine Learning</span></div>
+            <div class="highlight-item"><i class="fas fa-check-circle"></i><span>Data Visualization</span></div>
+            <div class="highlight-item"><i class="fas fa-check-circle"></i><span>Statistical Analysis</span></div>
+          </div>
+          <div class="about-actions">
+            <a href="mailto:jubayeralvi309@gmail.com" class="btn btn-primary">
+              <i class="fas fa-envelope"></i> Hire Me
+            </a>
+            <a href="cv.pdf" download="Jubayer_Uddin_Alvi_CV.pdf" class="btn btn-cv cv-download-btn" title="CV will be available soon">
+              <i class="fas fa-file-arrow-down"></i> Download CV
+              <span class="cv-badge">Soon</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SKILLS ═══════════════ -->
+  <section class="section skills" id="skills">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Expertise</span>
+        <h2 class="section-title">Skills & Technologies</h2>
+      </div>
+      <div class="skills-grid">
+
+        <div class="skill-category reveal-left">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon"><i class="fas fa-brain"></i></div>
+            <h3>Machine Learning & AI</h3>
+          </div>
+          <div class="skill-tags">
+            <span class="tag">Supervised Learning</span>
+            <span class="tag">Unsupervised Learning</span>
+            <span class="tag">Regression</span>
+            <span class="tag">Classification</span>
+            <span class="tag">Clustering</span>
+            <span class="tag">CNNs</span>
+            <span class="tag">RNNs</span>
+            <span class="tag">Feature Engineering</span>
+            <span class="tag">Model Optimization</span>
+          </div>
+        </div>
+
+        <div class="skill-category reveal-right">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon"><i class="fas fa-code"></i></div>
+            <h3>Programming Languages</h3>
+          </div>
+          <div class="skill-tags">
+            <span class="tag primary">Python</span>
+            <span class="tag">NumPy</span>
+            <span class="tag">Pandas</span>
+            <span class="tag">Scikit-learn</span>
+            <span class="tag">PyTorch</span>
+            <span class="tag">TensorFlow</span>
+            <span class="tag primary">SQL</span>
+          </div>
+        </div>
+
+        <div class="skill-category reveal-left">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon"><i class="fas fa-database"></i></div>
+            <h3>Data Engineering & Databases</h3>
+          </div>
+          <div class="skill-tags">
+            <span class="tag">SQL Server</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">Data Cleaning</span>
+            <span class="tag">Preprocessing</span>
+            <span class="tag">ETL Pipelines</span>
+            <span class="tag">Relational Schema Design</span>
+          </div>
+        </div>
+
+        <div class="skill-category reveal-right">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon"><i class="fas fa-square-root-alt"></i></div>
+            <h3>Statistical Analysis & Math</h3>
+          </div>
+          <div class="skill-tags">
+            <span class="tag">Descriptive Statistics</span>
+            <span class="tag">Inferential Statistics</span>
+            <span class="tag">Hypothesis Testing</span>
+            <span class="tag">Probability</span>
+            <span class="tag">Linear Algebra</span>
+            <span class="tag">Optimization</span>
+          </div>
+        </div>
+
+        <div class="skill-category reveal-left">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon"><i class="fas fa-chart-bar"></i></div>
+            <h3>Data Visualization & Analytics</h3>
+          </div>
+          <div class="skill-tags">
+            <span class="tag">Matplotlib</span>
+            <span class="tag">Seaborn</span>
+            <span class="tag primary">Tableau</span>
+            <span class="tag">Interactive Dashboards</span>
+            <span class="tag">EDA</span>
+          </div>
+        </div>
+
+        <div class="skill-category reveal-right">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon"><i class="fas fa-tools"></i></div>
+            <h3>Tools & Platforms</h3>
+          </div>
+          <div class="skill-tags">
+            <span class="tag">Git</span>
+            <span class="tag">GitHub</span>
+            <span class="tag">Jupyter Notebooks</span>
+            <span class="tag">VS Code</span>
+            <span class="tag">Google Colab</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ PROJECTS ═══════════════ -->
+  <section class="section projects" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Portfolio</span>
+        <h2 class="section-title">Featured Projects</h2>
+        <p class="section-subtitle">A showcase of my predictive models, deep learning pipelines, and data architectures.</p>
+      </div>
+
+      <div class="projects-grid" id="projects-grid">
+        <!-- Placeholder card 1 -->
+        <div class="project-card reveal-left">
+          <div class="project-img-wrap">
+            <div class="project-img-placeholder">
+              <i class="fas fa-brain"></i>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="ptag">Machine Learning</span>
+              <span class="ptag">Python</span>
+            </div>
+            <h3 class="project-title">Coming Soon</h3>
+            <p class="project-desc">A predictive machine learning project is currently in preparation. Project architecture, metrics, and source code will be posted here.</p>
+            <div class="project-links">
+              <a href="https://github.com/Mj-Alvi" target="_blank" rel="noopener" class="plink">
+                <i class="fab fa-github"></i> View GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Placeholder card 2 -->
+        <div class="project-card reveal-right">
+          <div class="project-img-wrap">
+            <div class="project-img-placeholder">
+              <i class="fas fa-network-wired"></i>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="ptag">Deep Learning</span>
+              <span class="ptag">PyTorch</span>
+            </div>
+            <h3 class="project-title">Coming Soon</h3>
+            <p class="project-desc">A deep learning neural network pipeline is under active development. Benchmarks and implementation will be published shortly.</p>
+            <div class="project-links">
+              <a href="https://github.com/Mj-Alvi" target="_blank" rel="noopener" class="plink">
+                <i class="fab fa-github"></i> View GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Placeholder card 3 -->
+        <div class="project-card reveal-left">
+          <div class="project-img-wrap">
+            <div class="project-img-placeholder">
+              <i class="fas fa-database"></i>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="ptag">Data Engineering</span>
+              <span class="ptag">SQL</span>
+            </div>
+            <h3 class="project-title">Coming Soon</h3>
+            <p class="project-desc">A scalable ETL data pipeline and interactive analytics dashboard will be featured here soon. Check back or visit my GitHub.</p>
+            <div class="project-links">
+              <a href="https://github.com/Mj-Alvi" target="_blank" rel="noopener" class="plink">
+                <i class="fab fa-github"></i> View GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="projects-footer">
+        <a href="https://github.com/Mj-Alvi" target="_blank" rel="noopener" class="btn btn-secondary">
+          <i class="fab fa-github"></i> View All on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ CONTACT ═══════════════ -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Let's Connect</span>
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="section-subtitle">Whether you have a project idea, a collaboration proposal, or just want to say hello — my inbox is always open.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info reveal-left">
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+            <div class="contact-detail">
+              <span class="contact-label">Email</span>
+              <a href="mailto:jubayeralvi309@gmail.com" class="contact-value">jubayeralvi309@gmail.com</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fab fa-linkedin-in"></i></div>
+            <div class="contact-detail">
+              <span class="contact-label">LinkedIn</span>
+              <a href="https://www.linkedin.com/in/jubayer-uddin-alvi-aaa0ba270/" target="_blank" rel="noopener" class="contact-value">jubayer-uddin-alvi</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fab fa-github"></i></div>
+            <div class="contact-detail">
+              <span class="contact-label">GitHub</span>
+              <a href="https://github.com/Mj-Alvi" target="_blank" rel="noopener" class="contact-value">Mj-Alvi</a>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form reveal-right" id="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" name="name" placeholder="John Doe" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Your Email</label>
+              <input type="email" id="email" name="email" placeholder="john@example.com" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="Project collaboration..." required />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Tell me about your project or idea..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary full-width">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+          <div class="form-note" id="form-note"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 Jubayer Uddin Alvi. Crafted with <span class="accent">♥</span> and data.</p>
+      <div class="footer-socials">
+        <a href="mailto:jubayeralvi309@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://www.linkedin.com/in/jubayer-uddin-alvi-aaa0ba270/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://github.com/Mj-Alvi" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
