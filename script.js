@@ -232,11 +232,13 @@ interactiveElements.forEach(el => {
    Completely disabled on mobile / touch screen devices
 ═══════════════════════════════════════════ */
 const isDesktopWithMouse = () => {
-  return window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth > 768;
+  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+  const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  return isFinePointer && !isTouchDevice && window.innerWidth > 768;
 };
 
 if (isDesktopWithMouse()) {
-  /* ── Custom Glowing Cursor ── */
+  /* ── Custom Glowing Cursor (Desktop Only) ── */
   const cursorDot  = document.createElement('div');
   const cursorRing = document.createElement('div');
   cursorDot.className  = 'cursor-dot';
@@ -249,12 +251,16 @@ if (isDesktopWithMouse()) {
 
   window.addEventListener('touchstart', () => {
     cursorVisible = false;
-    cursorDot.style.display = 'none';
-    cursorRing.style.display = 'none';
+    cursorDot.remove();
+    cursorRing.remove();
   }, { passive: true });
 
   document.addEventListener('mousemove', (e) => {
-    if (!isDesktopWithMouse() || (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) || e.pointerType === 'touch') return;
+    if (!isDesktopWithMouse() || (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) || e.pointerType === 'touch') {
+      cursorDot.style.display = 'none';
+      cursorRing.style.display = 'none';
+      return;
+    }
     mouseX = e.clientX;
     mouseY = e.clientY;
     cursorDot.style.display = 'block';

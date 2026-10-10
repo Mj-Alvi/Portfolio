@@ -1040,25 +1040,10 @@ ul { list-style: none; }
     z-index: 999;
   }
 
-  /* Color switcher in header on mobile */
-  .color-switcher {
-    display: flex;
-    gap: 6px;
-    padding: 5px 10px;
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    border-radius: 50px;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  }
-  .color-btn {
-    width: 20px;
-    height: 20px;
-    min-width: 20px;
-    min-height: 20px;
-    border-radius: 50%;
-    cursor: pointer;
-    touch-action: manipulation;
+  /* Remove color switcher from top navbar header on phone (kept in mobile dropdown menu) */
+  .theme-controls #color-switcher,
+  .nav-actions #color-switcher {
+    display: none !important;
   }
 
   /* Color switcher inside mobile dropdown menu */
@@ -1091,10 +1076,20 @@ ul { list-style: none; }
 
   /* Hero section & clamped typography */
   .hero {
-    padding: 95px 16px 45px;
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 105px 16px 45px;
     gap: 28px;
     min-width: 0;
     overflow-x: hidden;
+  }
+
+  /* Hide scroll-down arrow on mobile to prevent overlapping cards */
+  .scroll-down {
+    display: none !important;
   }
   .hero-content {
     display: flex;
@@ -1542,7 +1537,7 @@ ul { list-style: none; }
   display: none !important;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (hover: hover) and (pointer: fine) and (min-width: 769px) {
   .cursor-dot,
   .cursor-ring {
     display: block !important;
