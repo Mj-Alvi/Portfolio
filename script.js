@@ -243,11 +243,18 @@ if (isDesktopWithMouse()) {
   const cursorRing = document.createElement('div');
   cursorDot.className  = 'cursor-dot';
   cursorRing.className = 'cursor-ring';
+
+  /* Start completely hidden — only show after first real mouse movement */
+  cursorDot.style.display = 'none';
+  cursorDot.style.opacity = '0';
+  cursorRing.style.display = 'none';
+  cursorRing.style.opacity = '0';
   document.body.append(cursorDot, cursorRing);
 
-  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let mouseX = -100, mouseY = -100;
   let ringX = mouseX, ringY = mouseY;
-  let cursorVisible = true;
+  let cursorVisible = false;
+  let firstMove = true;
 
   window.addEventListener('touchstart', () => {
     cursorVisible = false;
@@ -263,6 +270,16 @@ if (isDesktopWithMouse()) {
     }
     mouseX = e.clientX;
     mouseY = e.clientY;
+
+    /* On the very first mouse move, snap ring position and fade in */
+    if (firstMove) {
+      firstMove = false;
+      ringX = mouseX;
+      ringY = mouseY;
+      cursorRing.style.left = `${ringX}px`;
+      cursorRing.style.top  = `${ringY}px`;
+    }
+
     cursorDot.style.display = 'block';
     cursorRing.style.display = 'block';
     cursorDot.style.left = `${mouseX}px`;
