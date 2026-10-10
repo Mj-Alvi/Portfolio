@@ -31,34 +31,43 @@ const savedTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', savedTheme);
 themeIcon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
 
-themeToggle.addEventListener('click', () => {
+let lastThemeTouch = 0;
+const toggleTheme = (e) => {
+  if (e && e.type === 'click' && Date.now() - lastThemeTouch < 450) return;
+  if (e && e.type === 'touchstart') lastThemeTouch = Date.now();
   const current = html.getAttribute('data-theme');
   const next = current === 'dark' ? 'light' : 'dark';
   html.setAttribute('data-theme', next);
   themeIcon.className = next === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
   localStorage.setItem('theme', next);
-});
+};
+
+themeToggle.addEventListener('click', toggleTheme);
+themeToggle.addEventListener('touchstart', toggleTheme, { passive: true });
 
 /* ═══════════════════════════════════════════
-   COLOR THEME SWITCHER
+   COLOR THEME SWITCHER (DESKTOP & MOBILE)
 ═══════════════════════════════════════════ */
-const colorBtns = document.querySelectorAll('.color-btn');
 const savedColor = localStorage.getItem('color') || 'cyan';
-html.setAttribute('data-color', savedColor);
+
+function applyColorTheme(color) {
+  html.setAttribute('data-color', color);
+  localStorage.setItem('color', color);
+  document.querySelectorAll('.color-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.color === color);
+  });
+}
 
 // Mark active color btn on load
-colorBtns.forEach(btn => {
-  if (btn.dataset.color === savedColor) btn.classList.add('active');
-});
+applyColorTheme(savedColor);
 
-colorBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const color = btn.dataset.color;
-    html.setAttribute('data-color', color);
-    localStorage.setItem('color', color);
-    colorBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  });
+// Support both click and touchstart for zero-delay mobile switching
+document.querySelectorAll('.color-btn').forEach(btn => {
+  const onSelect = (e) => {
+    applyColorTheme(btn.dataset.color);
+  };
+  btn.addEventListener('click', onSelect);
+  btn.addEventListener('touchstart', onSelect, { passive: true });
 });
 
 /* ═══════════════════════════════════════════
@@ -195,143 +204,222 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-/* ═══════════════════════════════════════════
-   CUSTOM GLOWING CURSOR
-═══════════════════════════════════════════ */
-const cursorDot  = document.createElement('div');
-const cursorRing = document.createElement('div');
-cursorDot.className  = 'cursor-dot';
-cursorRing.className = 'cursor-ring';
-document.body.append(cursorDot, cursorRing);
+// Enable immediate :active and touch feedback on iOS / Android
+document.addEventListener('touchstart', () => {}, { passive: true });
 
-let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-let ringX = mouseX, ringY = mouseY;
-
-let cursorVisible = true;
-
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-  cursorDot.style.left = `${mouseX}px`;
-  cursorDot.style.top  = `${mouseY}px`;
-
-  if (!cursorVisible) {
-    cursorVisible = true;
-    cursorDot.style.opacity = '1';
-    cursorRing.style.opacity = '0.65';
-  }
-});
-
-document.addEventListener('mouseleave', () => {
-  cursorVisible = false;
-  cursorDot.style.opacity = '0';
-  cursorRing.style.opacity = '0';
-});
-
-(function animateRing() {
-  ringX += (mouseX - ringX) * 0.15;
-  ringY += (mouseY - ringY) * 0.15;
-  cursorRing.style.left = `${ringX}px`;
-  cursorRing.style.top  = `${ringY}px`;
-  requestAnimationFrame(animateRing);
-})();
-
-const hoverTargets = 'a, button, .skill-category, .project-card, .stat-card, .tag, .btn, .color-btn, .contact-item, .hero-badge';
-
-document.addEventListener('mouseover', (e) => {
-  const current = e.target.closest(hoverTargets);
-  const previous = e.relatedTarget ? e.relatedTarget.closest(hoverTargets) : null;
-  if (current && (!previous || current !== previous)) {
-    cursorDot.classList.add('cursor-grow');
-    cursorRing.classList.add('cursor-grow');
-  }
-});
-
-document.addEventListener('mouseout', (e) => {
-  const current = e.target.closest(hoverTargets);
-  const next = e.relatedTarget ? e.relatedTarget.closest(hoverTargets) : null;
-  if (current && !next) {
-    cursorDot.classList.remove('cursor-grow');
-    cursorRing.classList.remove('cursor-grow');
-  }
-});
-
-/* ═══════════════════════════════════════════
-   SMOOTH 3D TILT / FLIP EFFECT (NO FLICKER)
-═══════════════════════════════════════════ */
-const tiltCards = document.querySelectorAll(
-  '.skill-category, .project-card, .stat-card, .data-card, .contact-item, .about-avatar-wrap, .hero-badge'
+// Activate color-changing effects on mobile tap for iOS and Android
+const interactiveElements = document.querySelectorAll(
+  '.btn, .color-btn, .theme-toggle, .nav-links a, .hero-socials a, .footer-socials a, .contact-social-btn, .tag, .hero-badge, .contact-item, .hamburger'
 );
 
-tiltCards.forEach(card => {
-  let rect = null;
-  let rafId = null;
+interactiveElements.forEach(el => {
+  el.addEventListener('touchstart', () => {
+    el.classList.add('tap-active');
+  }, { passive: true });
 
-  card.addEventListener('mouseenter', () => {
-    rect = card.getBoundingClientRect();
-    card.style.transition = 'none';
+  el.addEventListener('touchend', () => {
+    setTimeout(() => el.classList.remove('tap-active'), 250);
+  }, { passive: true });
+
+  el.addEventListener('touchcancel', () => {
+    el.classList.remove('tap-active');
+  }, { passive: true });
+});
+
+/* ═══════════════════════════════════════════
+   DESKTOP MOUSE-ONLY EFFECTS (CURSOR, 3D TILT, MAGNETIC)
+   Motion view strictly runs on desktop browsers with a mouse
+   Completely disabled on mobile / touch screen devices
+═══════════════════════════════════════════ */
+const isDesktopWithMouse = () => {
+  return window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth > 768;
+};
+
+if (isDesktopWithMouse()) {
+  /* ── Custom Glowing Cursor ── */
+  const cursorDot  = document.createElement('div');
+  const cursorRing = document.createElement('div');
+  cursorDot.className  = 'cursor-dot';
+  cursorRing.className = 'cursor-ring';
+  document.body.append(cursorDot, cursorRing);
+
+  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let ringX = mouseX, ringY = mouseY;
+  let cursorVisible = true;
+
+  window.addEventListener('touchstart', () => {
+    cursorVisible = false;
+    cursorDot.style.display = 'none';
+    cursorRing.style.display = 'none';
+  }, { passive: true });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDesktopWithMouse() || (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) || e.pointerType === 'touch') return;
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursorDot.style.display = 'block';
+    cursorRing.style.display = 'block';
+    cursorDot.style.left = `${mouseX}px`;
+    cursorDot.style.top  = `${mouseY}px`;
+
+    if (!cursorVisible) {
+      cursorVisible = true;
+      cursorDot.style.opacity = '1';
+      cursorRing.style.opacity = '0.65';
+    }
   });
 
-  card.addEventListener('mousemove', (e) => {
-    if (!rect) rect = card.getBoundingClientRect();
+  document.addEventListener('mouseleave', () => {
+    cursorVisible = false;
+    cursorDot.style.opacity = '0';
+    cursorRing.style.opacity = '0';
+  });
 
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(() => {
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = Math.max(-1, Math.min(1, (e.clientX - cx) / (rect.width / 2)));
-      const dy = Math.max(-1, Math.min(1, (e.clientY - cy) / (rect.height / 2)));
+  (function animateRing() {
+    if (isDesktopWithMouse()) {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      cursorRing.style.left = `${ringX}px`;
+      cursorRing.style.top  = `${ringY}px`;
+    }
+    requestAnimationFrame(animateRing);
+  })();
 
-      const tiltX = dy * -15;
-      const tiltY = dx * 15;
+  const hoverTargets = 'a, button, .skill-category, .project-card, .stat-card, .tag, .btn, .color-btn, .contact-item, .hero-badge, .about-avatar-wrap';
 
-      card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
-      card.style.boxShadow = `${-dx * 14}px ${-dy * 14}px 35px rgba(0,0,0,0.3), 0 0 20px var(--accent)`;
+  document.addEventListener('mouseover', (e) => {
+    if (!isDesktopWithMouse()) return;
+    const current = e.target.closest(hoverTargets);
+    const previous = e.relatedTarget ? e.relatedTarget.closest(hoverTargets) : null;
+    if (current && (!previous || current !== previous)) {
+      cursorDot.classList.add('cursor-grow');
+      cursorRing.classList.add('cursor-grow');
+    }
+  });
 
-      let shine = card.querySelector('.tilt-shine');
-      if (!shine) {
-        shine = document.createElement('div');
-        shine.className = 'tilt-shine';
-        shine.style.pointerEvents = 'none';
-        card.appendChild(shine);
+  document.addEventListener('mouseout', (e) => {
+    if (!isDesktopWithMouse()) return;
+    const current = e.target.closest(hoverTargets);
+    const next = e.relatedTarget ? e.relatedTarget.closest(hoverTargets) : null;
+    if (current && !next) {
+      cursorDot.classList.remove('cursor-grow');
+      cursorRing.classList.remove('cursor-grow');
+    }
+  });
+
+  /* ── Smooth 3D Tilt / Flip Effect (Desktop Only) ── */
+  const tiltCards = document.querySelectorAll(
+    '.skill-category, .project-card, .stat-card, .data-card, .contact-item, .about-avatar-wrap, .hero-badge'
+  );
+
+  tiltCards.forEach(card => {
+    let rect = null;
+    let rafId = null;
+
+    card.addEventListener('mouseenter', (e) => {
+      if (!isDesktopWithMouse() || e.pointerType === 'touch') return;
+      rect = card.getBoundingClientRect();
+      card.style.transition = 'none';
+    });
+
+    card.addEventListener('mousemove', (e) => {
+      if (!isDesktopWithMouse() || e.pointerType === 'touch' || (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents)) {
+        card.style.transform = '';
+        card.style.boxShadow = '';
+        return;
       }
-      const sx = ((e.clientX - rect.left) / rect.width) * 100;
-      const sy = ((e.clientY - rect.top) / rect.height) * 100;
-      shine.style.background = `radial-gradient(circle at ${sx}% ${sy}%, rgba(255,255,255,0.12) 0%, transparent 60%)`;
-      shine.style.opacity = '1';
+
+      if (!rect) rect = card.getBoundingClientRect();
+
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = Math.max(-1, Math.min(1, (e.clientX - cx) / (rect.width / 2)));
+        const dy = Math.max(-1, Math.min(1, (e.clientY - cy) / (rect.height / 2)));
+
+        const tiltX = dy * -15;
+        const tiltY = dx * 15;
+
+        card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+        card.style.boxShadow = `${-dx * 14}px ${-dy * 14}px 35px rgba(0,0,0,0.3), 0 0 20px var(--accent)`;
+
+        let shine = card.querySelector('.tilt-shine');
+        if (!shine) {
+          shine = document.createElement('div');
+          shine.className = 'tilt-shine';
+          shine.style.pointerEvents = 'none';
+          card.appendChild(shine);
+        }
+        const sx = ((e.clientX - rect.left) / rect.width) * 100;
+        const sy = ((e.clientY - rect.top) / rect.height) * 100;
+        shine.style.background = `radial-gradient(circle at ${sx}% ${sy}%, rgba(255,255,255,0.12) 0%, transparent 60%)`;
+        shine.style.opacity = '1';
+      });
+    });
+
+    card.addEventListener('mouseleave', () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rect = null;
+      card.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease';
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+      card.style.boxShadow = '';
+      const shine = card.querySelector('.tilt-shine');
+      if (shine) shine.style.opacity = '0';
     });
   });
 
-  card.addEventListener('mouseleave', () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    rect = null;
-    card.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease';
-    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
-    card.style.boxShadow = '';
-    const shine = card.querySelector('.tilt-shine');
-    if (shine) shine.style.opacity = '0';
+  /* ── Magnetic Button Effect (Desktop Only) ── */
+  document.querySelectorAll('.btn').forEach(btn => {
+    let btnRect = null;
+    btn.addEventListener('mouseenter', (e) => {
+      if (!isDesktopWithMouse() || e.pointerType === 'touch') return;
+      btnRect = btn.getBoundingClientRect();
+      btn.style.transition = 'transform 0.1s ease-out';
+    });
+    btn.addEventListener('mousemove', (e) => {
+      if (!isDesktopWithMouse() || e.pointerType === 'touch' || (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents)) {
+        btn.style.transform = '';
+        return;
+      }
+      if (!btnRect) btnRect = btn.getBoundingClientRect();
+      const dx = (e.clientX - btnRect.left - btnRect.width / 2) * 0.25;
+      const dy = (e.clientY - btnRect.top - btnRect.height / 2) * 0.25;
+      btn.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btnRect = null;
+      btn.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      btn.style.transform = 'translate(0px, 0px)';
+    });
   });
-});
 
-/* ═══════════════════════════════════════════
-   MAGNETIC BUTTON EFFECT (NO JITTER)
-═══════════════════════════════════════════ */
-document.querySelectorAll('.btn').forEach(btn => {
-  let btnRect = null;
-  btn.addEventListener('mouseenter', () => {
-    btnRect = btn.getBoundingClientRect();
-    btn.style.transition = 'transform 0.1s ease-out';
+  // Touch guard: reset any transforms when touch occurs
+  window.addEventListener('touchstart', () => {
+    tiltCards.forEach(card => {
+      card.style.transform = '';
+      card.style.boxShadow = '';
+      const shine = card.querySelector('.tilt-shine');
+      if (shine) shine.style.opacity = '0';
+    });
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.style.transform = '';
+    });
+  }, { passive: true });
+
+  // Reset transforms on window resize to mobile
+  window.addEventListener('resize', () => {
+    if (!isDesktopWithMouse()) {
+      tiltCards.forEach(card => {
+        card.style.transform = '';
+        card.style.boxShadow = '';
+        const shine = card.querySelector('.tilt-shine');
+        if (shine) shine.style.opacity = '0';
+      });
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.style.transform = '';
+      });
+    }
   });
-  btn.addEventListener('mousemove', (e) => {
-    if (!btnRect) btnRect = btn.getBoundingClientRect();
-    const dx = (e.clientX - btnRect.left - btnRect.width / 2) * 0.25;
-    const dy = (e.clientY - btnRect.top - btnRect.height / 2) * 0.25;
-    btn.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
-  });
-  btn.addEventListener('mouseleave', () => {
-    btnRect = null;
-    btn.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-    btn.style.transform = 'translate(0px, 0px)';
-  });
-});
+}
 
